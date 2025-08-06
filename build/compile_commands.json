@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/loch/code/cpp_cinema/build",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/cpp-cinema.dir/main.cpp.o -c /home/loch/code/cpp_cinema/main.cpp",
+  "file": "/home/loch/code/cpp_cinema/main.cpp",
+  "output": "CMakeFiles/cpp-cinema.dir/main.cpp.o"
+}
+]
