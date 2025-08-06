@@ -20,7 +20,8 @@ add_subdirectory(lib/SDL EXCLUDE_FROM_ALL)
 
 
 # include code
-add_executable(${PROJECT_NAME} main.cpp)
+file(GLOB SOURCES "src/*.cpp")
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 
 # Link Link Link
