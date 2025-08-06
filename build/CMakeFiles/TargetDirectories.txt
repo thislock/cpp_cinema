@@ -1,3 +1,0 @@
-/home/loch/code/cpp_cinema/build/CMakeFiles/cpp-cinema.dir
-/home/loch/code/cpp_cinema/build/CMakeFiles/edit_cache.dir
-/home/loch/code/cpp_cinema/build/CMakeFiles/rebuild_cache.dir
