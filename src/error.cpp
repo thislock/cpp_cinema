@@ -28,5 +28,5 @@ void showErrorPopup(const std::string& message) {
 int showSdlError(const std::string & error_type) {
   SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, error_type.c_str(), SDL_GetError(), nullptr);
   SDL_Quit();
-  return 1;
+  return -1;
 }
