@@ -9,6 +9,8 @@ extern "C" {
   #include <libavutil/imgutils.h>
 }
 
+#include <vector>
+
 struct Frame {
   AVFrame* frame     = nullptr;
   AVFrame* rgb_frame = nullptr;
@@ -24,6 +26,9 @@ public:
   ~Video();
 
 private:
+
+  std::vector<std::vector<uint8_t>> video_frames;
+
   AVFormatContext* format_context = nullptr;
   AVCodecParameters* codec_parameters = nullptr;
   SwsContext* sws_context = nullptr;

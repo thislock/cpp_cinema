@@ -10,7 +10,7 @@ const SDL_InitFlags SDL_INIT_FLAGS = SDL_INIT_VIDEO | SDL_INIT_EVENTS;
 
 int main(int argc, char* argv[]) {
   
-  std::string filename = "1.mp4";
+  std::string filename = "test.webm";
   Video video = Video(filename);
   
   if (SDL_Init( SDL_INIT_FLAGS ) == false) {  

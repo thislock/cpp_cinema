@@ -1,7 +1,6 @@
 
 #include <iostream>
 
-
 #include "video.h"
 
 #include <iostream>
@@ -152,7 +151,25 @@ int Video::Init(std::string & input_file) {
         sws_scale(this->sws_context,
                   frame->frame->data, frame->frame->linesize, 0, this->codec_context->height,
                   frame->rgb_frame->data, frame->rgb_frame->linesize);
-        // You can now process or save rgb_frame->data[0]
+        // save all the pixel data in the frame
+        int width = codec_context->width;
+        int height = codec_context->height;
+        int stride = frame->rgb_frame->linesize[0]; // how many bytes per row
+                
+        uint8_t * frame_data_raw = frame->rgb_frame->data[0];
+        
+        // Allocate output buffer (tight packed, no padding)
+        std::vector<uint8_t> rgb_output(height * width * 3);
+                
+        // Copy row by row
+        for (int y = 0; y < height; y++) {
+          uint8_t* src_row = frame_data_raw + y * stride;
+          uint8_t* dst_row = rgb_output.data() + y * width * 3;
+          memcpy(dst_row, src_row, width * 3);  // copy only actual pixel data
+        }
+
+        this->video_frames.push_back(rgb_output);
+
       }
     }
     av_packet_unref(frame->packet);
