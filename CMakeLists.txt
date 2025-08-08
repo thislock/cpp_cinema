@@ -9,7 +9,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
 # include ffmpeg
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET libavdevice libavfilter libavformat libavcodec libswresample libswscale libavutil)
+pkg_check_modules(LIBAVFORMAT REQUIRED libavformat)
+pkg_check_modules(LIBAVCODEC REQUIRED libavcodec)
+pkg_check_modules(LIBAVUTIL REQUIRED libavutil)
+pkg_check_modules(LIBSWSCALE REQUIRED libswscale)
+pkg_check_modules(LIBAVDEVICE REQUIRED libavdevice)
+pkg_check_modules(LIBAVFILTER REQUIRED libavfilter)
+pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample)
 
 
 # include sdl3
@@ -25,5 +31,25 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 
 # Link Link Link
-target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::LIBAV)
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+target_link_libraries(${PROJECT_NAME} 
+  PRIVATE 
+    SDL3::SDL3
+    ${LIBAVFORMAT_LIBRARIES}
+    ${LIBAVCODEC_LIBRARIES}
+    ${LIBAVUTIL_LIBRARIES}
+    ${LIBSWSCALE_LIBRARIES}
+    ${LIBAVDEVICE_LIBRARIES}
+    ${LIBAVFILTER_LIBRARIES}
+    ${LIBSWRESAMPLE_LIBRARIES}
+)
+
+target_include_directories(${PROJECT_NAME} 
+  PRIVATE 
+    ${LIBAVFORMAT_INCLUDE_DIRS}
+    ${LIBAVCODEC_INCLUDE_DIRS}
+    ${LIBAVUTIL_INCLUDE_DIRS}
+    ${LIBSWSCALE_INCLUDE_DIRS}
+    ${LIBAVDEVICE_INCLUDE_DIRS}
+    ${LIBAVFILTER_INCLUDE_DIRS}
+    ${LIBSWRESAMPLE_INCLUDE_DIRS}
+)

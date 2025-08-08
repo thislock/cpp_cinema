@@ -2,6 +2,7 @@
 #include <SDL3/SDL_main.h>
 #include <string>
 #include "error.h"
+#include "video.h"
 
 const char * WindowTitle = "test";
 
@@ -9,13 +10,16 @@ const SDL_InitFlags SDL_INIT_FLAGS = SDL_INIT_VIDEO | SDL_INIT_EVENTS;
 
 int main(int argc, char* argv[]) {
   
+  std::string filename = "1.mp4";
+  Video video = Video(filename);
+  
   if (SDL_Init( SDL_INIT_FLAGS ) == false) {  
     auto error = SDL_GetError();
     showErrorPopup(error);
     return 1;
   }
   
-  SDL_Window * window = SDL_CreateWindow(WindowTitle, 800, 600, 0);
+  SDL_Window * window = SDL_CreateWindow(WindowTitle, 800, 600, SDL_WINDOW_RESIZABLE);
   if (window == nullptr) {
     auto error = SDL_GetError();
     showErrorPopup(error);
@@ -31,6 +35,7 @@ int main(int argc, char* argv[]) {
   SDL_Surface * screen = SDL_CreateSurface(100, 100, SDL_PIXELFORMAT_ARGB32);
 
   SDL_Event event;
+
 
   bool isRunning = true;
   while (isRunning) {
