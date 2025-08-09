@@ -10,6 +10,7 @@ extern "C" {
 }
 
 #include <vector>
+#include <SDL3/SDL.h>
 
 struct Frame {
   AVFrame* frame     = nullptr;
@@ -25,9 +26,9 @@ public:
   Video(std::string& input_file);
   ~Video();
 
-private:
+  std::vector<SDL_Surface*> video_frames;
 
-  std::vector<std::vector<uint8_t>> video_frames;
+private:
 
   AVFormatContext* format_context = nullptr;
   AVCodecParameters* codec_parameters = nullptr;

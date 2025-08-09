@@ -95,6 +95,10 @@ Video::~Video() {
   avcodec_free_context(&this->codec_context);
   avformat_close_input(&this->format_context);
   sws_freeContext(this->sws_context);
+
+  for (auto frame : this->video_frames)
+    SDL_DestroySurface(frame);
+
   delete this->frame;
 }
 
@@ -159,16 +163,27 @@ int Video::Init(std::string & input_file) {
         uint8_t * frame_data_raw = frame->rgb_frame->data[0];
         
         // Allocate output buffer (tight packed, no padding)
-        std::vector<uint8_t> rgb_output(height * width * 3);
-                
+        uint8_t * rgb_output = (uint8_t*)SDL_malloc(height * width * 3);
+        
+        
         // Copy row by row
         for (int y = 0; y < height; y++) {
           uint8_t* src_row = frame_data_raw + y * stride;
-          uint8_t* dst_row = rgb_output.data() + y * width * 3;
+          uint8_t* dst_row = rgb_output + y * width * 3;
           memcpy(dst_row, src_row, width * 3);  // copy only actual pixel data
         }
+        
+        SDL_PixelFormat pixel_fmt = SDL_PIXELFORMAT_RGB24;
 
-        this->video_frames.push_back(rgb_output);
+        SDL_Surface* surface = SDL_CreateSurfaceFrom(
+          width,        // Width of the image in pixels
+          height,       // Height of the image in pixels
+          pixel_fmt,    // The SDL_PixelFormat of your raw data (e.g., SDL_PIXELFORMAT_RGBA32)
+          rgb_output,   // Pointer to your raw pixel data
+          stride        // Bytes per row (width * bytes_per_pixel)
+        );        
+        
+        this->video_frames.push_back(surface);
 
       }
     }

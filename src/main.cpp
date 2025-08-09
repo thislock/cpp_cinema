@@ -10,7 +10,7 @@ const SDL_InitFlags SDL_INIT_FLAGS = SDL_INIT_VIDEO | SDL_INIT_EVENTS;
 
 int main(int argc, char* argv[]) {
   
-  std::string filename = "test.webm";
+  std::string filename = "ohno.mp4";
   Video video = Video(filename);
   
   if (SDL_Init( SDL_INIT_FLAGS ) == false) {  
@@ -32,10 +32,11 @@ int main(int argc, char* argv[]) {
     return showSdlError("renderer error");
   }
 
-  SDL_Surface * screen = SDL_CreateSurface(100, 100, SDL_PIXELFORMAT_ARGB32);
+  SDL_Surface * screen = SDL_CreateSurface(500, 500, SDL_PIXELFORMAT_ARGB32);
 
   SDL_Event event;
 
+  int video_frames = 0;
 
   bool isRunning = true;
   while (isRunning) {
@@ -52,6 +53,12 @@ int main(int argc, char* argv[]) {
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
+
+    if (video_frames >= video.video_frames.size())
+      video_frames = 0;
+    auto tex = SDL_CreateTextureFromSurface(renderer, video.video_frames[video_frames++]);
+    SDL_RenderTexture(renderer, tex, NULL, NULL);
+    SDL_DestroyTexture(tex);
 
     SDL_RenderPresent(renderer);
     SDL_Delay(20);
