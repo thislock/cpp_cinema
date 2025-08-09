@@ -1,3 +1,5 @@
+
+#include <iostream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <string>
@@ -10,7 +12,28 @@ const SDL_InitFlags SDL_INIT_FLAGS = SDL_INIT_VIDEO | SDL_INIT_EVENTS;
 
 int main(int argc, char* argv[]) {
   
-  std::string filename = "ohno.mp4";
+  if (argc < 2) {
+    std::cerr << "Usage: " << argv[0] << " <video-file>\n";
+    return 1;
+  }
+
+  const char* filename_cstr = argv[1];
+
+  // Open the input file
+  AVFormatContext* fmt_ctx = nullptr;
+  if (avformat_open_input(&fmt_ctx, filename_cstr, nullptr, nullptr) != 0) {
+    std::cerr << "Could not open file: " << filename_cstr << "\n";
+    return 1;
+  }
+
+  // Retrieve stream information
+  if (avformat_find_stream_info(fmt_ctx, nullptr) < 0) {
+    std::cerr << "Could not find stream information\n";
+    avformat_close_input(&fmt_ctx);
+    return 1;
+  }
+
+  std::string filename(filename_cstr);
   Video video = Video(filename);
   
   if (SDL_Init( SDL_INIT_FLAGS ) == false) {  
